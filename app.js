@@ -17,11 +17,33 @@ const MAPBOX_TOKEN = 'pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2lqbmN5eG9mMDBndHVmbTU5Mmg1djF
 // const DATA_URL = 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv'; // eslint-disable-line
 const DATA_URL = 'project-locations.csv'; // eslint-disable-line
 
+// const colorRamp1 = [#E84C2F, #F98B77, #FECCC3, #FFFFE9, #E7F890, #C6E337, #96B304];
+// const colorRamp2 = [#EA6C0F, #FFBC1F, #FFF10F, #F1CBAF, #EA73FF, #D52EF2, #750588];
+// const colorRamp3 = [#005592, #71A4DB, #B0D7F3, #E7E1FC, #EA73FF, #D52EF2, #680D7A];
+// const colorRamp4 = [#EA6C0F, #FFBC1F, #FFF10F, #95FF62, #0FBEFF, #1F7DFF, #0F14EA];
+
 class Root extends Component {
   constructor(props) {
     super(props);
     this.state = {
       rasterStyle: {},
+      baseMapStyle: {
+        "version": 8,
+        "sources": {
+            "raster-tiles": {
+                "type": "raster",
+                "tiles": ['http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+                "tileSize": 256
+            }
+        },
+        "layers": [{
+            "id": "simple-tiles",
+            "type": "raster",
+            "source": "raster-tiles",
+            "minzoom": 0,
+            "maxzoom": 22
+        }]
+      },
       viewport: {
         ...DeckGLOverlay.defaultViewport,
         width: 500,
@@ -43,10 +65,10 @@ class Root extends Component {
     window.addEventListener('resize', this._resize.bind(this));
     this._resize();
 
-    this._fetchBasemap();
+    this._fetchRasters();
   }
 
-  _fetchBasemap() {
+  _fetchRasters() {
     const layerTpl = {
       version: '1.3.0',
       stat_tag: 'API',
@@ -55,7 +77,7 @@ class Root extends Component {
           "type": "mapnik",
           "options": {
             "sql": "SELECT * FROM api_ny_adj_nnty_kd_zg_ds2_en_csv_v2_9928348",
-            "cartocss": "#layer { polygon-fill: ramp([_2016], (#ffffff, #F69E8E,#FBBAA7,#FFD5BE,#FFFFE9,#ECF6BD,#E6F19D,#D2E573), jenks); polygon-opacity: 1; } #layer::outline { line-width: .1; line-color: #ffffff; line-opacity: 1; }",
+            "cartocss": "#layer { polygon-fill: ramp([_2016], (#005592, #71A4DB, #B0D7F3, #E7E1FC, #EA73FF, #D52EF2, #680D7A), jenks); polygon-opacity: 1; } #layer::outline { line-width: .1; line-color: #ffffff; line-opacity: 1; }",
             "cartocss_version": "2.3.0"
           }
         }
@@ -78,15 +100,29 @@ class Root extends Component {
                       `${data.cdn_url.templates.https.url.replace('{s}', s)}/jcalonso/api/v1/map/${data.layergroupid}/{z}/{x}/{y}.png`
                     ),
                     "tileSize": 256
+                },
+                "basemap-tiles": {
+                    "type": "raster",
+                    "tiles": ['http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+                    "tileSize": 256
                 }
             },
-            "layers": [{
+            "layers": [
+              // {
+              //   "id": "basemap-tiles",
+              //   "type": "raster",
+              //   "source": "basemap-tiles",
+              //   "minzoom": 0,
+              //   "maxzoom": 22
+              // },
+              {
                 "id": "simple-tiles",
                 "type": "raster",
                 "source": "raster-tiles",
                 "minzoom": 0,
                 "maxzoom": 22
-            }]
+              }
+            ]
           }
         })
       }).catch((err) => {
@@ -122,7 +158,7 @@ class Root extends Component {
   }
 
   render() {
-    const { viewport, data, rasterStyle } = this.state;
+    const { viewport, data, rasterStyle, baseMapStyle } = this.state;
 
     return (
       <MapGL
@@ -131,7 +167,7 @@ class Root extends Component {
         // mapStyle="mapbox://styles/mapbox/dark-v9" // Mapbox default dark
         mapStyle="mapbox://styles/gsdpm/cioenuwii001maznontujohu8" // WorldBank Natural
         // mapStyle="mapbox://styles/gsdpm/cir6ljf470006bsmehhstmxeh" // WorldBank Grey
-        layers={rasterStyle} // Carto layer
+        mapStyle={rasterStyle} // Carto layer
         //mapStyle='' // No basemap
 
         onViewportChange={this._onViewportChange.bind(this)}

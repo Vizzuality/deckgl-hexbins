@@ -20,16 +20,17 @@ const colorRange = [
   [0, 43, 73]
 ];
 
-const elevationScale = {min: 0, max: 2000};
+const elevationScale = {min: 0, max: 3000};
 
 const defaultProps = {
-  radius: 20000,
+  radius: 30000,
   upperPercentile: 95,
   coverage: 1
 };
 
 export default class DeckGLOverlay extends Component {
   static get defaultColorRange() {
+    console.log(colorRange);
     return colorRange;
   }
 
@@ -102,13 +103,49 @@ export default class DeckGLOverlay extends Component {
       return null;
     }
 
+    const colorRange1 = [
+      [176,215,243,255],
+      [134,181,223,255],
+      [88,145,207,255],
+      [0,111,191,255],
+      [0,85,146,255],
+      [0,43,73,255]
+    ];
+
+    const colorRange2 = [
+      [222,255,211,255],
+      [185,236,166,255],
+      [144,205,122,255],
+      [95,153,74,255],
+      [54,115,32,255],
+      [31,77,14,255]
+    ];
+
+    const colorRange3 = [
+      [255,251,248,255],
+      [255,228,211,255],
+      [255,201,165,255],
+      [241,145,82,255],
+      [231,101,15,255],
+      [174,70,2,255]
+    ];
+
+    const colorRange4 = [
+      [254,233,255,255],
+      [253,194,255,255],
+      [252,145,255,255],
+      [234,61,239,255],
+      [181,18,185,255],
+      [132,0,136,255]
+    ];
+
     const layers = [
       new HexagonLayer({
         id: 'heatmap',
-        colorRange,
+        colorRange: colorRange2,
         coverage,
         data,
-        elevationRange: [1, 2000],
+        elevationRange: [1, 3000],
         elevationScale: this.state.elevationScale,
         extruded: true,
         getPosition: d => d,
