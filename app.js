@@ -17,33 +17,11 @@ const MAPBOX_TOKEN = 'pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2lqbmN5eG9mMDBndHVmbTU5Mmg1djF
 // const DATA_URL = 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv'; // eslint-disable-line
 const DATA_URL = 'project-locations.csv'; // eslint-disable-line
 
-// const colorRamp1 = [#E84C2F, #F98B77, #FECCC3, #FFFFE9, #E7F890, #C6E337, #96B304];
-// const colorRamp2 = [#EA6C0F, #FFBC1F, #FFF10F, #F1CBAF, #EA73FF, #D52EF2, #750588];
-// const colorRamp3 = [#005592, #71A4DB, #B0D7F3, #E7E1FC, #EA73FF, #D52EF2, #680D7A];
-// const colorRamp4 = [#EA6C0F, #FFBC1F, #FFF10F, #95FF62, #0FBEFF, #1F7DFF, #0F14EA];
-
 class Root extends Component {
   constructor(props) {
     super(props);
     this.state = {
       rasterStyle: {},
-      baseMapStyle: {
-        "version": 8,
-        "sources": {
-            "raster-tiles": {
-                "type": "raster",
-                "tiles": ['http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
-                "tileSize": 256
-            }
-        },
-        "layers": [{
-            "id": "simple-tiles",
-            "type": "raster",
-            "source": "raster-tiles",
-            "minzoom": 0,
-            "maxzoom": 22
-        }]
-      },
       viewport: {
         ...DeckGLOverlay.defaultViewport,
         width: 500,
@@ -68,19 +46,20 @@ class Root extends Component {
     this._fetchRasters();
   }
 
+// const colorRamp1 = [#E84C2F, #F98B77, #FECCC3, #FFFFE9, #E7F890, #C6E337, #96B304];
+// const colorRamp2 = [#EA6C0F, #FFBC1F, #FFF10F, #F1CBAF, #EA73FF, #D52EF2, #750588];
+// const colorRamp3 = [#005592, #71A4DB, #B0D7F3, #E7E1FC, #EA73FF, #D52EF2, #680D7A];
+// const colorRamp4 = [#EA6C0F, #FFBC1F, #FFF10F, #95FF62, #0FBEFF, #1F7DFF, #0F14EA];
+// const colorRamp4 = [#F47760, #F69E8E, #FFD5BE, #FFFFE9, #ECF6BD, #D2E573, #C2DA4D];
+// const colorRamp4 = [#F69E8E, #FBB8AC, #FFD5BE, #FFFFE9, #ECF6BD, #D2E573, #C2DA4D];
+
   _fetchRasters() {
     const layerTpl = {
       version: '1.3.0',
       stat_tag: 'API',
       layers: [
-        {
-          "type": "mapnik",
-          "options": {
-            "sql": "SELECT * FROM api_ny_adj_nnty_kd_zg_ds2_en_csv_v2_9928348",
-            "cartocss": "#layer { polygon-fill: ramp([_2016], (#005592, #71A4DB, #B0D7F3, #E7E1FC, #EA73FF, #D52EF2, #680D7A), jenks); polygon-opacity: 1; } #layer::outline { line-width: .1; line-color: #ffffff; line-opacity: 1; }",
-            "cartocss_version": "2.3.0"
-          }
-        }
+        // buckets styles –sergio's comment–
+       
       ]
     };
     const params = `?stat_tag=API&config=${encodeURIComponent(JSON.stringify(layerTpl))}`;
@@ -101,20 +80,35 @@ class Root extends Component {
                     ),
                     "tileSize": 256
                 },
-                "basemap-tiles": {
+                "satelite-tiles": {
                     "type": "raster",
                     "tiles": ['http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+                    "tileSize": 256
+                },
+                "grey-tiles": {
+                    "type": "raster",
+                    "tiles": [`https://api.mapbox.com/styles/v1/gsdpm/cir6ljf470006bsmehhstmxeh/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
+                    "tileSize": 256
+                },
+                "natural-tiles": {
+                    "type": "raster",
+                    "tiles": [`https://api.mapbox.com/styles/v1/gsdpm/cioenuwii001maznontujohu8/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
+                    "tileSize": 256
+                },
+                "dark-tiles": {
+                    "type": "raster",
+                    "tiles": [`https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
                     "tileSize": 256
                 }
             },
             "layers": [
-              // {
-              //   "id": "basemap-tiles",
-              //   "type": "raster",
-              //   "source": "basemap-tiles",
-              //   "minzoom": 0,
-              //   "maxzoom": 22
-              // },
+              {
+                "id": "basemap-tiles",
+                "type": "raster",
+                "source": "natural-tiles",
+                "minzoom": 0,
+                "maxzoom": 22
+              },
               {
                 "id": "simple-tiles",
                 "type": "raster",
@@ -163,13 +157,7 @@ class Root extends Component {
     return (
       <MapGL
         {...viewport}
-
-        // mapStyle="mapbox://styles/mapbox/dark-v9" // Mapbox default dark
-        mapStyle="mapbox://styles/gsdpm/cioenuwii001maznontujohu8" // WorldBank Natural
-        // mapStyle="mapbox://styles/gsdpm/cir6ljf470006bsmehhstmxeh" // WorldBank Grey
         mapStyle={rasterStyle} // Carto layer
-        //mapStyle='' // No basemap
-
         onViewportChange={this._onViewportChange.bind(this)}
         mapboxApiAccessToken={MAPBOX_TOKEN}
       >

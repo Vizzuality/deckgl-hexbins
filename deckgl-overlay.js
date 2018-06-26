@@ -142,7 +142,7 @@ export default class DeckGLOverlay extends Component {
     const layers = [
       new HexagonLayer({
         id: 'heatmap',
-        colorRange: colorRange2,
+        colorRange: colorRange4,
         coverage,
         data,
         elevationRange: [1, 3000],
