@@ -59,27 +59,29 @@ class Root extends Component {
       stat_tag: 'API',
       layers: [
         // buckets styles –sergio's comment–
-       
+
       ]
     };
     const params = `?stat_tag=API&config=${encodeURIComponent(JSON.stringify(layerTpl))}`;
-    fetch(`https://jcalonso.carto.com/api/v1/map${params}`)
+    fetch(`https://raw.githubusercontent.com/uber/react-map-gl/4.0-release/examples/data/us-income.geojson`)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        
+        console.log(data);
         this.setState({
           rasterStyle: {
             "version": 8,
             "sources": {
-                "raster-tiles": {
-                    "type": "raster",
-                    "tiles": data.cdn_url.templates.https.subdomains.map(s =>
-                      `${data.cdn_url.templates.https.url.replace('{s}', s)}/jcalonso/api/v1/map/${data.layergroupid}/{z}/{x}/{y}.png`
-                    ),
-                    "tileSize": 256
+                "choro-tiles": {
+                    "type": "geojson",
+                    data
                 },
+                "fanny-tiles": {
+                  "type": "raster",
+                  "tiles": [`https://api.mapbox.com/styles/v1/fannycc/cjoy4zgqt2u3f2rpbb2pnva1j/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
+                  "tileSize": 256
+              },
                 "satelite-tiles": {
                     "type": "raster",
                     "tiles": ['http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
@@ -111,17 +113,33 @@ class Root extends Component {
               },
               {
                 "id": "simple-tiles",
-                "type": "raster",
-                "source": "raster-tiles",
-                "minzoom": 0,
-                "maxzoom": 22
+                "type": "geojson",
+                "source": "choro-tiles",
+                type: 'fill',
+                paint: {
+                  'fill-color': {
+                    property: 'percentile',
+                    stops: [
+                      [0, '#3288bd'],
+                      [1, '#66c2a5'],
+                      [2, '#abdda4'],
+                      [3, '#e6f598'],
+                      [4, '#ffffbf'],
+                      [5, '#fee08b'],
+                      [6, '#fdae61'],
+                      [7, '#f46d43'],
+                      [8, '#d53e4f']
+                    ]
+                  },
+                  'fill-opacity': 0.8
+                }
               }
             ]
           }
         })
       }).catch((err) => {
         console.error(err);
-      });    
+      });
   }
 
   _resize() {
@@ -136,7 +154,7 @@ class Root extends Component {
       viewport: { ...this.state.viewport, ...viewport }
     });
   }
-  
+
   getRandom(arr, n) {
     var result = new Array(n),
         len = arr.length,
