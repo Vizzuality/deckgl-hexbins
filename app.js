@@ -63,7 +63,7 @@ class Root extends Component {
       ]
     };
     const params = `?stat_tag=API&config=${encodeURIComponent(JSON.stringify(layerTpl))}`;
-    fetch(`https://raw.githubusercontent.com/uber/react-map-gl/4.0-release/examples/data/us-income.geojson`)
+    fetch(`./India_example.geojson`)
       .then((response) => {
         return response.json();
       })
@@ -118,17 +118,17 @@ class Root extends Component {
                 type: 'fill',
                 paint: {
                   'fill-color': {
-                    property: 'percentile',
+                    property: 'data',
                     stops: [
-                      [0, '#3288bd'],
-                      [1, '#66c2a5'],
-                      [2, '#abdda4'],
-                      [3, '#e6f598'],
-                      [4, '#ffffbf'],
-                      [5, '#fee08b'],
-                      [6, '#fdae61'],
-                      [7, '#f46d43'],
-                      [8, '#d53e4f']
+                      [0.3, '#3288bd'],
+                      [0.35, '#66c2a5'],
+                      [0.4, '#abdda4'],
+                      [0.45, '#e6f598'],
+                      [0.5, '#ffffbf'],
+                      [0.55, '#fee08b'],
+                      [0.6, '#fdae61'],
+                      [0.7, '#f46d43'],
+                      [0.8, '#d53e4f']
                     ]
                   },
                   'fill-opacity': 0.8
