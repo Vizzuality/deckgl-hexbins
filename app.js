@@ -30,13 +30,14 @@ class Root extends Component {
       data: null
     };
 
-    requestCsv(DATA_URL, (error, response) => {
-      if (!error) {
-        const data = response.map(d => [Number(d.lng), Number(d.lat)]);
-        const newData = this.getRandom(data, data.length / 2);
-        this.setState({ data: newData });
-      }
-    });
+    // requestCsv(DATA_URL, (error, response) => {
+    //   if (!error) {
+    //     const data = response.map(d => [Number(d.lng), Number(d.lat)]);
+    //     const newData = this.getRandom(data, data.length / 2);
+    //     this.setState({ data: newData });
+    //   }
+    // });
+
   }
 
   componentDidMount() {
@@ -63,7 +64,7 @@ class Root extends Component {
       ]
     };
     const params = `?stat_tag=API&config=${encodeURIComponent(JSON.stringify(layerTpl))}`;
-    fetch(`./India_example.geojson`)
+    fetch(`./data/africawaterbody.geojson`)
       .then((response) => {
         return response.json();
       })
@@ -107,7 +108,7 @@ class Root extends Component {
               {
                 "id": "basemap-tiles",
                 "type": "raster",
-                "source": "natural-tiles",
+                "source": "fanny-tiles",
                 "minzoom": 0,
                 "maxzoom": 22
               },
@@ -118,20 +119,14 @@ class Root extends Component {
                 type: 'fill',
                 paint: {
                   'fill-color': {
-                    property: 'data',
+                    property: 'Shape_len',
                     stops: [
-                      [0.3, '#3288bd'],
-                      [0.35, '#66c2a5'],
-                      [0.4, '#abdda4'],
-                      [0.45, '#e6f598'],
-                      [0.5, '#ffffbf'],
-                      [0.55, '#fee08b'],
-                      [0.6, '#fdae61'],
-                      [0.7, '#f46d43'],
-                      [0.8, '#d53e4f']
+                      [0.0, '#4286f4'],
+                      [100, '#4286f4'],
+
                     ]
                   },
-                  'fill-opacity': 0.8
+                  'fill-opacity': 1.0
                 }
               }
             ]
