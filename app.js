@@ -64,19 +64,19 @@ class Root extends Component {
       ]
     };
     const params = `?stat_tag=API&config=${encodeURIComponent(JSON.stringify(layerTpl))}`;
-    fetch(`./data/africawaterbody.geojson`)
+    fetch(`./data/Roads_AICD.json`)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         this.setState({
           rasterStyle: {
             "version": 8,
             "sources": {
                 "choro-tiles": {
                     "type": "geojson",
-                    data
+                    "data": data
                 },
                 "fanny-tiles": {
                   "type": "raster",
@@ -114,20 +114,31 @@ class Root extends Component {
               },
               {
                 "id": "simple-tiles",
-                "type": "geojson",
+                "type": "line",
+                // "stroked": false,
+                // "filled": false,
+                // "extruded": false,
+                // "lineWidthMinPixels":0.5,
                 "source": "choro-tiles",
-                type: 'fill',
-                paint: {
-                  'fill-color': {
-                    property: 'Shape_len',
-                    stops: [
-                      [0.0, '#4286f4'],
-                      [100, '#4286f4'],
-
-                    ]
-                  },
-                  'fill-opacity': 1.0
+                "layout": {
+                  "line-join": "round",
+                  "line-cap": "round"
+                },
+                "paint": {
+                    "line-color": "#888",
+                    "line-width": 3
                 }
+                // "paint": {
+                //   'fill-color': {
+                //     "property": 'Shape_len',
+                //     "stops": [
+                //       [0.0, '#4286f4'],
+                //       [100, '#4286f4'],
+
+                //     ]
+                //   },
+                //   'fill-opacity': 1.0
+                // }
               }
             ]
           }
