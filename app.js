@@ -64,7 +64,7 @@ class Root extends Component {
       ]
     };
     const params = `?stat_tag=API&config=${encodeURIComponent(JSON.stringify(layerTpl))}`;
-    fetch(`./data/Roads_AICD.json`)
+    fetch(`./data/africawaterbody.geojson`)
       .then((response) => {
         return response.json();
       })
@@ -78,11 +78,16 @@ class Root extends Component {
                     "type": "geojson",
                     "data": data
                 },
+                "boundary-tiles": {
+                  "type": "raster",
+                  "tiles": [`https://api.mapbox.com/styles/v1/wri/cjhfaeph33ami2socjqjf2zwz/tiles/256/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`],
+                  "tileSize": 256
+                },
                 "fanny-tiles": {
                   "type": "raster",
                   "tiles": [`https://api.mapbox.com/styles/v1/fannycc/cjoy4zgqt2u3f2rpbb2pnva1j/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
                   "tileSize": 256
-              },
+                },
                 "satelite-tiles": {
                     "type": "raster",
                     "tiles": ['http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
@@ -102,44 +107,41 @@ class Root extends Component {
                     "type": "raster",
                     "tiles": [`https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
                     "tileSize": 256
-                }
+                },
+                "carbon-monxide": {
+                    "type": "raster",
+                    "tiles": [`https://api.mapbox.com/styles/v1/wri/cjqwmiokq01lx2rk7pii4qy4n/tiles/256/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`],
+                    "tileSize": 256
+                },
             },
             "layers": [
               {
                 "id": "basemap-tiles",
                 "type": "raster",
-                "source": "fanny-tiles",
+                "source": "carbon-monxide",
                 "minzoom": 0,
                 "maxzoom": 22
               },
               {
-                "id": "simple-tiles",
-                "type": "line",
-                // "stroked": false,
-                // "filled": false,
-                // "extruded": false,
-                // "lineWidthMinPixels":0.5,
-                "source": "choro-tiles",
-                "layout": {
-                  "line-join": "round",
-                  "line-cap": "round"
-                },
-                "paint": {
-                    "line-color": "#888",
-                    "line-width": 3
-                }
-                // "paint": {
-                //   'fill-color': {
-                //     "property": 'Shape_len',
-                //     "stops": [
-                //       [0.0, '#4286f4'],
-                //       [100, '#4286f4'],
-
-                //     ]
-                //   },
-                //   'fill-opacity': 1.0
-                // }
-              }
+                "id": "boundary-tiles",
+                "type": "raster",
+                "source": "boundary-tiles",
+                "minzoom": 0,
+                "maxzoom": 22
+              },
+              // {
+              //   "id": "simple-tiles",
+              //   "type": "line",
+              //   // "stroked": false,
+              //   // "filled": false,
+              //   // "extruded": false,
+              //   // "lineWidthMinPixels":0.5,
+              //   "source": "choro-tiles",
+              //   "paint": {
+              //       "line-color": ["get", "colors"],
+              //       "line-width": 1.5
+              //           }
+              // }
             ]
           }
         })
