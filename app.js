@@ -83,6 +83,11 @@ class Root extends Component {
                   "tiles": [`https://api.mapbox.com/styles/v1/wri/cjhfaeph33ami2socjqjf2zwz/tiles/256/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`],
                   "tileSize": 256
                 },
+                "basin-analysis": {
+                  "type": "raster",
+                  "tiles": [`https://earthengine.googleapis.com/map/121700e5401cbe4339b4c89714d9980b/{z}/{x}/{y}?token=833934e1db61fed465be384e6eb6274d`],
+                  "tileSize": 256
+                },
                 "fanny-tiles": {
                   "type": "raster",
                   "tiles": [`https://api.mapbox.com/styles/v1/fannycc/cjoy4zgqt2u3f2rpbb2pnva1j/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
@@ -118,14 +123,14 @@ class Root extends Component {
               {
                 "id": "basemap-tiles",
                 "type": "raster",
-                "source": "carbon-monxide",
+                "source": "fanny-tiles",
                 "minzoom": 0,
                 "maxzoom": 22
               },
               {
                 "id": "boundary-tiles",
                 "type": "raster",
-                "source": "boundary-tiles",
+                "source": "basin-analysis",
                 "minzoom": 0,
                 "maxzoom": 22
               },
