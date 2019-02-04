@@ -30,13 +30,13 @@ class Root extends Component {
       data: null
     };
 
-    requestCsv(DATA_URL, (error, response) => {
-      if (!error) {
-        const data = response.map(d => [Number(d.lng), Number(d.lat)]);
-        const newData = this.getRandom(data, data.length / 2);
-        this.setState({ data: newData });
-      }
-    });
+    // requestCsv(DATA_URL, (error, response) => {
+    //   if (!error) {
+    //     const data = response.map(d => [Number(d.lng), Number(d.lat)]);
+    //     const newData = this.getRandom(data, data.length / 2);
+    //     this.setState({ data: newData });
+    //   }
+    // });
   }
 
   componentDidMount() {
@@ -63,7 +63,7 @@ class Root extends Component {
       ]
     };
     const params = `?stat_tag=API&config=${encodeURIComponent(JSON.stringify(layerTpl))}`;
-    fetch(`./India_example.geojson`)
+    fetch(`./data/gadm36_WB_filtered.geojson`)
       .then((response) => {
         return response.json();
       })
