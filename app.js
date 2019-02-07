@@ -131,16 +131,20 @@ class Root extends Component {
               },
               {
                 "id": "simple-tiles",
-                "type": "line",
-                // "stroked": false,
-                // "filled": false,
-                // "extruded": false,
-                // "lineWidthMinPixels":0.5,
+                "type": "geojson",
                 "source": "choro-tiles",
-                "paint": {
-                    "line-color": ["get", "colors"],
-                    "line-width": 1.5
-                        }
+                type: 'fill',
+                paint: {
+                  'fill-color': {
+                    property: 'Shape_len',
+                    stops: [
+                      [0.0, '#4286f4'],
+                      [100, '#4286f4'],
+
+                    ]
+                  },
+                  'fill-opacity': 1.0
+                }
               }
             ]
           }
