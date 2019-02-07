@@ -129,19 +129,19 @@ class Root extends Component {
                 "minzoom": 0,
                 "maxzoom": 22
               },
-              // {
-              //   "id": "simple-tiles",
-              //   "type": "line",
-              //   // "stroked": false,
-              //   // "filled": false,
-              //   // "extruded": false,
-              //   // "lineWidthMinPixels":0.5,
-              //   "source": "choro-tiles",
-              //   "paint": {
-              //       "line-color": ["get", "colors"],
-              //       "line-width": 1.5
-              //           }
-              // }
+              {
+                "id": "simple-tiles",
+                "type": "line",
+                // "stroked": false,
+                // "filled": false,
+                // "extruded": false,
+                // "lineWidthMinPixels":0.5,
+                "source": "choro-tiles",
+                "paint": {
+                    "line-color": ["get", "colors"],
+                    "line-width": 1.5
+                        }
+              }
             ]
           }
         })
