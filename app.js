@@ -25,7 +25,12 @@ class Root extends Component {
       viewport: {
         ...DeckGLOverlay.defaultViewport,
         width: 500,
-        height: 500
+        height: 500,
+        latitude: 27.826330006771975 ,
+        longitude: 86.75519263499336,
+        zoom: 11,
+        maxZoom:18,
+        minZoom:8
       },
       data: null
     };
@@ -113,12 +118,17 @@ class Root extends Component {
                     "tiles": [`https://api.mapbox.com/styles/v1/wri/cjqwmiokq01lx2rk7pii4qy4n/tiles/256/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`],
                     "tileSize": 256
                 },
+                "everest": {
+                  "type": "raster",
+                  "tiles": [`https://storage.googleapis.com/gee-tmp/everest_tiles/{z}/{x}/{y}.png`],
+                  "tileSize": 256
+              },
             },
             "layers": [
               {
                 "id": "basemap-tiles",
                 "type": "raster",
-                "source": "carbon-monxide",
+                "source": "everest",
                 "minzoom": 0,
                 "maxzoom": 22
               },
