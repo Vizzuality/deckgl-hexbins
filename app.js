@@ -28,9 +28,9 @@ class Root extends Component {
         height: 500,
         latitude: 27.826330006771975 ,
         longitude: 86.75519263499336,
-        zoom: 11,
+        zoom: 7,
         maxZoom:18,
-        minZoom:8
+        minZoom:3
       },
       data: null
     };
@@ -69,7 +69,7 @@ class Root extends Component {
       ]
     };
     const params = `?stat_tag=API&config=${encodeURIComponent(JSON.stringify(layerTpl))}`;
-    fetch(`./data/africawaterbody.geojson`)
+    fetch(`./data/test.geojson`)
       .then((response) => {
         return response.json();
       })
@@ -91,6 +91,11 @@ class Root extends Component {
                 "fanny-tiles": {
                   "type": "raster",
                   "tiles": [`https://api.mapbox.com/styles/v1/fannycc/cjoy4zgqt2u3f2rpbb2pnva1j/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
+                  "tileSize": 256
+                },
+                "fc-tiles": {
+                  "type": "raster",
+                  "tiles": [`https://api.mapbox.com/styles/v1/fannycc/ck222p8uf1sca1cpa2o3rdeb4/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
                   "tileSize": 256
                 },
                 "satelite-tiles": {
@@ -123,39 +128,50 @@ class Root extends Component {
                   "tiles": [`https://storage.googleapis.com/gee-tmp/everest_tiles/{z}/{x}/{y}.png`],
                   "tileSize": 256
               },
+              "landsat_service": {
+                "type": "raster",
+                "tiles": [`https://production-api.globalforestwatch.org/v2/landsat-tiles/2017/{z}/{x}/{y}`],
+                "tileSize": 256
+            },
+            "cropland": {
+              "type": "raster",
+              "tiles": [`https://storage.googleapis.com/forest-forward/tilesets/cropland/{z}/{x}/{y}.png`],
+              "tileSize": 256
+          },
+
             },
             "layers": [
               {
                 "id": "basemap-tiles",
                 "type": "raster",
-                "source": "everest",
+                "source": "fc-tiles",
                 "minzoom": 0,
                 "maxzoom": 22
               },
               {
                 "id": "boundary-tiles",
                 "type": "raster",
-                "source": "boundary-tiles",
+                "source": "cropland",
                 "minzoom": 0,
                 "maxzoom": 22
               },
-              {
-                "id": "simple-tiles",
-                "type": "geojson",
-                "source": "choro-tiles",
-                type: 'fill',
-                paint: {
-                  'fill-color': {
-                    property: 'Shape_len',
-                    stops: [
-                      [0.0, '#4286f4'],
-                      [100, '#4286f4'],
+              // {
+              //   "id": "simple-tiles",
+              //   "type": "geojson",
+              //   "source": "choro-tiles",
+              //   type: 'fill',
+              //   paint: {
+              //     'fill-color': {
+              //       property: 'Shape_len',
+              //       stops: [
+              //         [0.0, '#4286f4'],
+              //         [100, '#4286f4'],
 
-                    ]
-                  },
-                  'fill-opacity': 1.0
-                }
-              }
+              //       ]
+              //     },
+              //     'fill-opacity': 1.0
+              //   }
+              // }
             ]
           }
         })
