@@ -11,7 +11,8 @@ import { csv as requestCsv } from 'd3-request';
 // const { Map } = require('immutable')
 
 // Set your mapbox token here
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2lqbmN5eG9mMDBndHVmbTU5Mmg1djF6MiJ9.QqFCD7tcmccysN8GUClW8w';
+const MAPBOX_TOKEN = 'pk.eyJ1Ijoibmctdml6enVhbGl0eSIsImEiOiJjanYyNG4xMGIweWJiNGVva3JtZXpqenIzIn0.r6qoeCK9Fszv1zQ1_IqK_Q#5.8/18.677435/86.425009/0';
+
 
 // Source data CSV
 // const DATA_URL = 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv'; // eslint-disable-line
@@ -93,6 +94,11 @@ class Root extends Component {
                   "tiles": [`https://api.mapbox.com/styles/v1/fannycc/cjoy4zgqt2u3f2rpbb2pnva1j/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
                   "tileSize": 256
                 },
+                "Ari-NF_Basemap": {
+                  "type": "raster",
+                  "tiles": [`https://api.mapbox.com/styles/v1/ng-vizzuality/ck1um16dt06pt1dqkjlurla5q.html?fresh=true&title=true&access_token=${MAPBOX_TOKEN}`],
+                  "tileSize": 256
+                },
                 "fc-tiles": {
                   "type": "raster",
                   "tiles": [`https://api.mapbox.com/styles/v1/fannycc/ck222p8uf1sca1cpa2o3rdeb4/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`],
@@ -144,7 +150,7 @@ class Root extends Component {
               {
                 "id": "basemap-tiles",
                 "type": "raster",
-                "source": "fc-tiles",
+                "source": "Ari-NF_Basemap",
                 "minzoom": 0,
                 "maxzoom": 22
               },
